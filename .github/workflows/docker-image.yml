@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Print runner info
-        shell: pwsh 
+        shell: powershell 
         run: |
           Write-Host "Self-hosted runner is working!"
           Write-Host "Hostname: $env:COMPUTERNAME"
@@ -22,13 +22,13 @@ jobs:
           Write-Host "Current directory: $(Get-Location)"
 
       - name: List files in repo
-        shell: pwsh
+        shell: powershell
         run: |
           Get-ChildItem -Recurse
 
       - name: Simulate build step
-        shell: pwsh
-        run: Write-Host "🔧 Running build simulation..."
+        shell: powershell
+        run: Write-Host "Running build simulation..."
 
 
 # name: Build and push Docker image to dockerhub
