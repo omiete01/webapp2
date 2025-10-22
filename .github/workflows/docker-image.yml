@@ -14,20 +14,21 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Print runner info
+        shell: powershell
         run: |
           echo "✅ Self-hosted runner is working!"
           echo "🖥️ Hostname: $env:COMPUTERNAME"
           echo "👤 Username: $env:USERNAME"
           echo "📁 Current directory: $(Get-Location)"
-        shell: powershell
 
       - name: List files in repo
+        shell: powershell
         run: |
           Get-ChildItem -Recurse
-        shell: powershell
 
       - name: Simulate build step
         run: echo "🔧 Running build simulation..."
+
 
 
 
