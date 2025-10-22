@@ -1,58 +1,59 @@
-name: Test Self-Hosted Runner
+name: Build and push Docker image to dockerhub
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+    branches: [ "master" ]
 
 jobs:
-  test-runner:
+  build:
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Check out the repo
+      uses: actions/checkout@v4
 
-      - name: Print runner info
-        shell: powershell 
-        run: |
-          Write-Host "Self-hosted runner is working!"
-          Write-Host "Hostname: $env:COMPUTERNAME"
-          Write-Host "Username: $env:USERNAME"
-          Write-Host "Current directory: $(Get-Location)"
+    - name: Login to dockerhub
+      uses: docker/login-action@v3.1.0
+      with:
+       username: ${{ secrets.DOCKERHUB_NAME }}
+       password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: List files in repo
-        shell: powershell
-        run: |
-          Get-ChildItem -Recurse
-
-      - name: Simulate build step
-        shell: powershell
-        run: Write-Host "Running build simulation..."
+    - name: Build and push to dockerhub
+      uses: docker/build-push-action@v5
+      with:
+       context:
+       push: true
+       tags: omiete01/webapp2:latest
 
 
-# name: Build and push Docker image to dockerhub
+# name: Test Self-Hosted Runner
 
 # on:
 #   push:
-#     branches: [ "master" ]
+#     branches:
+#       - master
+#   workflow_dispatch:
 
 # jobs:
-#   build:
-#     runs-on: ubuntu-latest
+#   test-runner:
+#     runs-on: self-hosted
 #     steps:
-#     - name: Check out the repo
-#       uses: actions/checkout@v4
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-#     - name: Login to dockerhub
-#       uses: docker/login-action@v3.1.0
-#       with:
-#        username: ${{ secrets.DOCKERHUB_NAME }}
-#        password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       - name: Print runner info
+#         shell: powershell 
+#         run: |
+#           Write-Host "Self-hosted runner is working!"
+#           Write-Host "Hostname: $env:COMPUTERNAME"
+#           Write-Host "Username: $env:USERNAME"
+#           Write-Host "Current directory: $(Get-Location)"
 
-#     - name: Build and push to dockerhub
-#       uses: docker/build-push-action@v5
-#       with:
-#        context:
-#        push: true
-#        tags: omiete01/webapp2:latest
+#       - name: List files in repo
+#         shell: powershell
+#         run: |
+#           Get-ChildItem -Recurse
+
+#       - name: Simulate build step
+#         shell: powershell
+#         run: Write-Host "Running build simulation..."
+
