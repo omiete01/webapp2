@@ -1,25 +1,62 @@
-name: Build and push Docker image to dockerhub
+name: Test Self-Hosted Runner
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test-runner:
+    runs-on: self-hosted
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Login to dockerhub
-      uses: docker/login-action@v3.1.0
-      with:
-       username: ${{ secrets.DOCKERHUB_NAME }}
-       password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Print runner info
+        run: |
+          echo "✅ Self-hosted runner is working!"
+          echo "🖥️ Hostname: $env:COMPUTERNAME"
+          echo "👤 Username: $env:USERNAME"
+          echo "📁 Current directory: $(Get-Location)"
+        shell: powershell
 
-    - name: Build and push to dockerhub
-      uses: docker/build-push-action@v5
-      with:
-       context:
-       push: true
-       tags: omiete01/webapp2:latest
+      - name: List files in repo
+        run: |
+          Get-ChildItem -Recurse
+        shell: powershell
+
+      - name: Simulate build step
+        run: echo "🔧 Running build simulation..."
+
+
+
+
+
+# name: Build and push Docker image to dockerhub
+
+# on:
+#   push:
+#     branches: [ "master" ]
+
+
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Check out the repo
+#       uses: actions/checkout@v4
+
+#     - name: Login to dockerhub
+#       uses: docker/login-action@v3.1.0
+#       with:
+#        username: ${{ secrets.DOCKERHUB_NAME }}
+#        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#     - name: Build and push to dockerhub
+#       uses: docker/build-push-action@v5
+#       with:
+#        context:
+#        push: true
+#        tags: omiete01/webapp2:latest
